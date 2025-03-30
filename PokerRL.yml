@@ -1,0 +1,9 @@
+ name: PokerRL
+ channels:
+   - defaults
+   - conda-forge
+ dependencies:
+   - pip
+   - numpy
+   - pip:
+     - matplotlib
