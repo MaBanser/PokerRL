@@ -1,6 +1,4 @@
-conda activate PokerRL
-python
-import torch
-print(torch.rand(5,3)
-torch.cuda.is_available()
+call conda activate PokerRL
+python validate_env.py
+call conda deactivate
 pause
