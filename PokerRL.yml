@@ -5,5 +5,6 @@
  dependencies:
    - pip
    - numpy
+   - matplotlib
    - pip:
-     - matplotlib
+     - -e ./poker/clubs
