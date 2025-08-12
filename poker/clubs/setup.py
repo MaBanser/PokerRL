@@ -52,7 +52,7 @@ setup(
     python_requires=">=3.6",
     install_requires=requirements,
     include_package_data=True,
-    extras_requires={"render": extra_requirements},
+    extras_require={"render": extra_requirements},
     project_urls={
         "Bug Reports": "https://github.com/fschlatt/clubs/issues",
         "Source": "https://github.com/fschlatt/clubs/",

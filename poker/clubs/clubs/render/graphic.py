@@ -1,6 +1,6 @@
 import copy
 import http.client
-import imp
+import importlib.util
 import math
 import multiprocessing
 import os
@@ -16,9 +16,9 @@ from .. import error, poker
 from . import viewer
 
 try:
-    imp.find_module("gevent")
-    imp.find_module("flask")
-    imp.find_module("flask_socketio")
+    importlib.util.find_spec("gevent")
+    importlib.util.find_spec("flask")
+    importlib.util.find_spec("flask_socketio")
     REQUIREMENTS = True
 except ImportError:
     REQUIREMENTS = False
