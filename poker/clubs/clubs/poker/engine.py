@@ -208,7 +208,7 @@ class Dealer:
         # dealer
         self.action = -1
         self.active = [False] * self.num_players
-        self.button = 0
+        self.button = -1
         self.community_cards: List[poker.Card] = []
         self.deck = poker.Deck(self.num_suits, self.num_ranks)
         self.evaluator = poker.Evaluator(
@@ -295,6 +295,9 @@ class Dealer:
         if reset_button:
             self.button = 0
         else:
+            self.button = (self.button + 1) % self.num_players
+        # Only active players can be button
+        while not self.active[self.button]:
             self.button = (self.button + 1) % self.num_players
 
         self.deck.shuffle()
