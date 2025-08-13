@@ -6,5 +6,6 @@
    - pip
    - numpy
    - matplotlib
+   - torchinfo
    - pip:
-     - -e ./poker/clubs
+     - -e ./poker/clubs[render]

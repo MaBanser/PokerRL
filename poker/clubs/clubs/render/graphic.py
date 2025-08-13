@@ -1,6 +1,7 @@
 import copy
 import http.client
 import importlib.util
+import json
 import math
 import multiprocessing
 import os
@@ -8,7 +9,6 @@ import socket
 import time
 import urllib.error
 import urllib.request
-from multiprocessing import connection
 from typing import Any, Dict, List, Optional, Tuple, Union, overload
 from xml.etree import ElementTree as et
 
@@ -59,22 +59,8 @@ class GraphicViewer(viewer.PokerViewer):
         self.process = multiprocessing.Process(target=self._run_flask)
         self.process.start()
 
-        self._test_socket_conn()
         self._test_flask_conn()
         print(f"clubs table openend at http://{self.host}:{self.port}")
-
-    def _test_socket_conn(self) -> None:
-        start = time.time()
-        while True:
-            try:
-                self.socket = connection.Client((self.host, self.port + 1))
-                break
-            except (ConnectionRefusedError, OSError):
-                time.sleep(0.01)
-                if time.time() - start > 10:
-                    raise error.RenderInitializationError(
-                        "unable to connect to flask process socket"
-                    )
 
     def _test_flask_conn(self) -> None:
         start = time.time()
@@ -94,7 +80,6 @@ class GraphicViewer(viewer.PokerViewer):
 
     def close(self) -> None:
         if self.process.is_alive():
-            self.socket.send({"content": "close"})
             self.process.terminate()
             self.process.join()
 
@@ -127,23 +112,15 @@ class GraphicViewer(viewer.PokerViewer):
             svg = str(self.svg_poker.base_svg)
             return flask.render_template("index.html", svg=markupsafe.Markup(svg))
 
-        def listener() -> None:
+        @app.route('/update', methods=['POST'])
+        def update():  # type: ignore
             nonlocal config
-            socket = connection.Listener((self.host, self.port + 1))
-            conn = socket.accept()
-            while True:
-                if conn.poll():
-                    message: Dict[str, Any] = conn.recv()
-                    if message["content"] == "close":
-                        conn.close()
-                        break
-                    else:
-                        config = message["content"]
-                        socketio.emit("config", config, broadcast=True)
-                socketio.sleep(0.0001)
-            socket.close()
-
-        socketio.start_background_task(listener)
+            # Get the JSON data from the request
+            new_config = flask.request.get_json()
+            if new_config is not None:
+                config = new_config
+                socketio.emit('config', config)
+            return flask.jsonify(success=True)
 
         socketio.run(app, port=self.port)
 
@@ -180,7 +157,20 @@ class GraphicViewer(viewer.PokerViewer):
         ...     'stacks': [100, 100] # List[int] - list of stack sizes
         ... }
         """
-        self.socket.send({"content": _jsonify(config)})
+        # Convert the config to JSON
+        json_config = _jsonify(config)
+        # Make a POST request to the Flask server's /update endpoint
+        url = f"http://{self.host}:{self.port}/update"
+        try:
+            req = urllib.request.Request(url, method='POST')
+            req.add_header('Content-Type', 'application/json')
+            data = json.dumps(json_config).encode('utf-8')
+            response = urllib.request.urlopen(req, data=data)
+            if response.status != 200:
+                print(f"Warning: update request returned status {response.status}")
+        except Exception as e:
+            print(f"Error in render: {e}")
+            
         if sleep:
             time.sleep(sleep)
 
