@@ -25,6 +25,10 @@ class ObservationDict(TypedDict):
     stacks: List[int]
     street_commits: List[int]
 
+class InfoDict(TypedDict):
+    tournament_ended: bool
+    winner: int  # index of the winning player, -1 if no winner yet
+
 
 class Dealer:
     """Runs a range of different of poker games dependent on the
@@ -318,7 +322,7 @@ class Dealer:
 
         return self._observation(False)
 
-    def step(self, bet: float) -> Tuple[ObservationDict, List[int], List[bool]]:
+    def step(self, bet: float) -> Tuple[ObservationDict, List[int], List[bool], InfoDict]:
         """Advances poker game to next player. If the bet is 0, it is
         either considered a check or fold, depending on the previous
         action. The given bet is always rounded to the closest valid bet
@@ -333,9 +337,9 @@ class Dealer:
 
         Returns
         -------
-        Tuple[ObservationDict, List[int], List[bool]]
+        Tuple[ObservationDict, List[int], List[bool], InfoDict]
             observation dictionary, payouts for every player, boolean value for every
-            player showing if that player is still active in the round
+            player showing if that player is still active in the round, information dictionary
 
         Examples
         --------
@@ -355,14 +359,20 @@ class Dealer:
         ...  'stacks': [9, 9],
         ...  'street_commits': [0, 0]},
         ...  [0, 0],
-        ...  [False, False])
+        ...  [False, False],
+        ...  {'tournament_ended': False, 
+        ...  'winner': -1})
         """
         if self.action == -1:
             if any(self.active):
                 done = self._done()
                 payouts = self._payouts()
                 observation = self._observation(all(done))
-                return observation, payouts, done
+                info = {
+                    "tournament_ended": False,
+                    "winner": -1,  # no winner yet
+                }
+                return observation, payouts, done, info
             raise error.TableResetError("call reset() before calling first step()")
 
         fold = bet < 0
@@ -383,6 +393,7 @@ class Dealer:
             self.street_raises += 1
 
         self._collect_bet(bet)
+        print(f"Player {self.action} bets {bet} chips, ")
 
         self.history.append((self.action, int(bet), bool(fold)))
 
@@ -416,6 +427,10 @@ class Dealer:
 
         done = self._done()
         payouts = self._payouts()
+        info = {
+            "tournament_ended": False,
+            "winner": -1,  # no winner yet
+        }
         if all(done):
             self.action = -1
             self.pot = 0
@@ -425,8 +440,14 @@ class Dealer:
                     self.stacks, payouts, self.pot_commits
                 )
             ]
+            if [stack > 0 for stack in self.stacks].count(True) <= 1:
+                # if only one player left, end tournament
+                info = {
+                    "tournament_ended": True,
+                    "winner": self.stacks.index(max(self.stacks)),
+                }
         observation = self._observation(all(done))
-        return observation, payouts, done
+        return observation, payouts, done, info
 
     def _render_config(self) -> render.viewer.RenderConfig:
         action = int(self.action)

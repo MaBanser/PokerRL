@@ -42,7 +42,7 @@ while True:
     else:
         bet = random.randint(min_raise, max_raise)
 
-    obs, rewards, done = dealer.step(bet)
+    obs, rewards, done, info = dealer.step(bet)
     if all(done):
         break
 

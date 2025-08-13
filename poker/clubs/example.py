@@ -1,5 +1,4 @@
 import random
-import time
 
 import clubs
 
@@ -10,33 +9,35 @@ def main():
     dealer = clubs.poker.Dealer(**config)
     obs = dealer.reset()
 
-    dealer.render()
-    time.sleep(1)
+    dealer.render(sleep=1)
 
     while True:
         # number of chips a player must bet to call
         call = obs["call"]
         # smallest number of chips a player is allowed to bet for a raise
         min_raise = obs["min_raise"]
+        max_raise = obs["max_raise"]
 
         rand = random.random()
         # 15% chance to fold
         if rand < 0.15:
             bet = 0
-        # 80% chance to call
-        elif rand < 0.95:
+        # 50% chance to call
+        elif rand < 0.65:
             bet = call
-        # 5% to raise to min_raise
+        # 35% to raise
         else:
-            bet = min_raise
+            bet = random.randint(min_raise, max_raise)
 
-        obs, rewards, done = dealer.step(bet)
+        obs, rewards, done, info = dealer.step(bet)
 
-        dealer.render()
-        time.sleep(1)
+        dealer.render(sleep=1)
 
         if all(done):
-            break
+            if info["tournament_ended"]:
+                print(f"Tournament ended. Winner: {info['winner']}")
+                break
+            obs = dealer.reset()
 
     print(rewards)
 
