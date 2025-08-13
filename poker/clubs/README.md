@@ -58,11 +58,12 @@ The type of poker game is defined using a configuration dictionary. See [configs
 * num_streets
   * int: number of streets
 * blinds
-  * int or list of ints: the blind distribution starting from the button e.g. [0, 1, 2, 0, 0, 0] for a 6 player 1-2 game
+  * int or list of ints: the blind distribution starting from the button e.g. [1, 2] for a 6 player 1-2 game
   * a single int is expanded to the number of players, settings blinds=0 will result in no blinds [0, 0, 0, 0, 0, 0]
 * antes
-  * int or list of ints: the ante distribution starting from the button, analog to the blind distribution
-  * single ints are expanded to the number of players
+  * int or list of ints: ante distribution as a list of ints, one for each player starting from the button 
+  * e.g. [0, 0, 5] for a three player game with a bb ante of 5, 
+  * passed ints will be expanded to all players i.e. pass antes=0 for no antes
 * raise_sizes
   * float or str or list of floats or str: the maximum raise size as a list of values, one for each street
   * options are ints (for fixed raise sizes), float('inf') (for no limit raise sizes) or 'pot' for pot limit raise sizes
@@ -108,7 +109,7 @@ Evaluations per second = 714974.362062254
 
 ## Visualize
 
-3 different render modes are available via `dealer.render()`. The default render mode uses a web front which gets exposed on localhost on a specified or random port.
+2 different render modes are available via `dealer.render()`. The default render mode uses a web front which gets exposed on localhost on a specified or random port.
 
 <div align="center">
 

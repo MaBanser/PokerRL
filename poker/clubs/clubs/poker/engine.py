@@ -45,7 +45,7 @@ class Dealer:
         num_streets=4
     blinds : Union[int, List[int]]
         blind distribution as a list of ints, one for each player
-        starting from the button e.g. [0, 1, 2] for a three player game
+        starting from the button e.g. [1, 2] for a game
         with a sb of 1 and bb of 2, passed ints will be expanded to
         all players i.e. pass blinds=0 for no blinds
     antes : Union[int, List[int]]
@@ -106,7 +106,7 @@ class Dealer:
         ...     mandatory_num_hole_cards=0, start_stack=200
         ... )
         >>> Dealer( # 1-2 6 Player PLO
-        ...     num_players=6, num_streets=4, blinds=[0, 1, 2, 0, 0, 0],
+        ...     num_players=6, num_streets=4, blinds=[1, 2],
         ...     antes=0, raise_sizes='pot', num_raises=float('inf'),
         ...     num_suits=4, num_ranks=13, num_hole_cards=4,
         ...     mandatory_num_hole_cards=2, start_stack=200
@@ -153,9 +153,11 @@ class Dealer:
             return [var] * expect_num
 
         error_msg = "incorrect {} distribution, expected list of length {}, got {}"
+        blinds += [0] * (num_players - len(blinds))
         blinds = check_inp(
             blinds, num_players, error_msg.format("blind", num_players, str(blinds)),
         )
+        blinds = [blind for blind in blinds if blind > 0]
         antes = check_inp(
             antes, num_players, error_msg.format("ante", num_players, str(antes))
         )
@@ -194,7 +196,7 @@ class Dealer:
         self.num_streets = num_streets
         self.blinds = blinds
         self.antes = antes
-        self.big_blind = blinds[1]
+        self.big_blind = blinds[-1]
         self.raise_sizes = [clean_rs(raise_size) for raise_size in raise_sizes]
         self.num_raises = [float(raise_num) for raise_num in num_raises]
         self.num_suits = num_suits
@@ -315,13 +317,16 @@ class Dealer:
         self.street_raises = 0
 
         self.action = self.button
-        # in heads up button posts small blind
-        if self.num_players > 2:
+
+        # Collect antes and blinds
+        # In heads up button posts small blind
+        if sum(self.active) > 2:
             self._move_action()
-        self._collect_multiple_bets(bets=self.antes, street_commits=False)
-        self._collect_multiple_bets(bets=self.blinds, street_commits=True)
-        self._move_action()
-        self._move_action()
+        self._collect_antes(bets=self.antes)
+
+        for blind in self.blinds:
+            self._collect_bet(bet=blind)
+            self._move_action()
 
         return self._observation(False)
 
@@ -610,8 +615,8 @@ class Dealer:
         # if check/fold closest
         return 0
 
-    def _collect_multiple_bets(
-        self, bets: List[int], street_commits: bool = True
+    def _collect_antes(
+        self, bets: List[int]
     ) -> None:
         # roll list to action
         bets = bets[-self.action :] + bets[: -self.action]  # noqa: E203
@@ -619,11 +624,7 @@ class Dealer:
             (stack > 0) * active * bet
             for stack, active, bet in zip(self.stacks, self.active, bets)
         ]
-        if street_commits:
-            self.street_commits = [
-                street_commit + bet
-                for street_commit, bet in zip(self.street_commits, bets)
-            ]
+
         self.pot += sum(bets)
         self.pot_commits = [
             pot_commit + bet for pot_commit, bet in zip(self.pot_commits, bets)
