@@ -63,10 +63,10 @@ class Dealer:
         sizes can be set using 'pot'. if only a single int or
         string is passed the value is expanded to a list the length
         of number of streets, e.g. for a standard no limit game pass
-        raise_sizes=float('inf')
+        raise_sizes='inf'
     num_raises : Union[int, Literal["inf"], List[Union[int, Literal["inf"]]]]
         max number of bets for each street including preflop, valid
-        raise numbers are ints and floats. if only a single int or float
+        raise numbers are ints. if only a single int
         is passed the value is expanded to a list the length of number
         of streets, e.g. for a standard limit game pass num_raises=4
     num_suits : int
@@ -101,20 +101,23 @@ class Dealer:
 
         >>> Dealer( # 1-2 Heads Up No Limit Texas Hold'em
         ...     num_players=2, num_streets=4, blinds=[1, 2], antes=0,
-        ...     raise_sizes=float('inf'), num_raises=float('inf'),
+        ...     raise_sizes='inf', num_raises='inf',
         ...     num_suits=4, num_ranks=13, num_hole_cards=2,
+        ...     num_community_cards=[0, 3, 1, 1], num_cards_for_hand=5,
         ...     mandatory_num_hole_cards=0, start_stack=200
         ... )
         >>> Dealer( # 1-2 6 Player PLO
         ...     num_players=6, num_streets=4, blinds=[1, 2],
-        ...     antes=0, raise_sizes='pot', num_raises=float('inf'),
+        ...     antes=0, raise_sizes='pot', num_raises='inf',
         ...     num_suits=4, num_ranks=13, num_hole_cards=4,
+        ...     num_community_cards=[0, 3, 1, 1], num_cards_for_hand=5,
         ...     mandatory_num_hole_cards=2, start_stack=200
         ... )
         >>> Dealer( # 1-2 Heads Up No Limit Short Deck
         ...     num_players=2, num_streets=4, blinds=[1, 2], antes=0,
-        ...     raise_sizes=float('inf'), num_raises=float('inf'),
+        ...     raise_sizes='inf', num_raises='inf',
         ...     num_suits=4, num_ranks=9, num_hole_cards=2,
+        ...     num_community_cards=[0, 3, 1, 1], num_cards_for_hand=5,
         ...     mandatory_num_hole_cards=0, start_stack=200,
         ...     order=[
         ...         'sf', 'fk', 'fl', 'fh', 'st',
