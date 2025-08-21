@@ -150,13 +150,14 @@ class Dealer:
             var: Union[List[Any], Any], expect_num: int, error_msg: str
         ) -> List[Any]:
             if isinstance(var, list):
-                if len(var) != expect_num:
+                if len(var) < expect_num:
+                    var += [0] * (expect_num - len(var))
+                if len(var) > expect_num:
                     raise error.InvalidConfigError(error_msg)
                 return var
             return [var] * expect_num
 
         error_msg = "incorrect {} distribution, expected list of length {}, got {}"
-        blinds += [0] * (num_players - len(blinds))
         blinds = check_inp(
             blinds, num_players, error_msg.format("blind", num_players, str(blinds)),
         )
@@ -199,7 +200,10 @@ class Dealer:
         self.num_streets = num_streets
         self.blinds = blinds
         self.antes = antes
-        self.big_blind = blinds[-1]
+        try:
+            self.big_blind = blinds[-1]
+        except IndexError:
+            self.big_blind = 0
         self.raise_sizes = [clean_rs(raise_size) for raise_size in raise_sizes]
         self.num_raises = [float(raise_num) for raise_num in num_raises]
         self.num_suits = num_suits
@@ -404,7 +408,6 @@ class Dealer:
             self.street_raises += 1
 
         self._collect_bet(bet)
-        print(f"Player {self.action} bets {bet} chips, ")
 
         self.history.append((self.action, int(bet), bool(fold)))
 
