@@ -36,6 +36,8 @@ class PokerViewer:
         number of hole cards
     num_community_cards : int
         number of community cards
+    **kwargs : Any
+        Additional keyword arguments, such as agents for rendering player names.
     """
 
     def __init__(
@@ -48,6 +50,12 @@ class PokerViewer:
         self.num_players = num_players
         self.num_hole_cards = num_hole_cards
         self.num_community_cards = num_community_cards
+
+        if 'agents' in kwargs:
+            self.agents = kwargs['agents']
+        else:
+            self.agents = None
+
 
     def render(self, config: RenderConfig, sleep: float = 0) -> None:
         """Render the table based on the table configuration

@@ -38,6 +38,13 @@ html {
     stroke-linejoin: round;
 }
 
+.player-name {
+    fill: white;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    text-anchor: middle;
+    font-weight: bold;
+}
 
 .card-background {
     stroke: #000000;

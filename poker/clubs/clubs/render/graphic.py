@@ -53,7 +53,7 @@ class GraphicViewer(viewer.PokerViewer):
             tmp_socket.close()
 
         self.svg_poker = _SVGPoker(
-            self.num_players, self.num_hole_cards, self.num_community_cards
+            self.num_players, self.num_hole_cards, self.num_community_cards, agents = self.agents
         )
 
         self.process = multiprocessing.Process(target=self._run_flask)
@@ -506,11 +506,15 @@ class _SVGElement:
 
 class _SVGPoker:
     def __init__(
-        self, num_players: int, num_hole_cards: int, num_community_cards: int
+        self, num_players: int, num_hole_cards: int, num_community_cards: int, **kwargs: Any
     ) -> None:
         self.num_players = num_players
         self.num_hole_cards = num_hole_cards
         self.num_community_cards = num_community_cards
+        if 'agents' in kwargs:
+            self.agents = kwargs['agents']
+        else:
+            self.agents = None
         self.base_svg = self._base_svg()
 
     def _base_svg(self) -> "_SVGElement":
@@ -528,13 +532,13 @@ class _SVGPoker:
         player_rectangle = _RoundedRectangle(
             table.x, table.y, table.width, table.height
         )
-        player_rectangle.width += 100
-        player_rectangle.height += 100
+        player_rectangle.width += 115
+        player_rectangle.height += 115
         street_commit_rectangle = _RoundedRectangle(
             table.x, table.y, table.width, table.height
         )
-        street_commit_rectangle.width -= 225
-        street_commit_rectangle.height -= 185
+        street_commit_rectangle.width -= 260
+        street_commit_rectangle.height -= 215
 
         players = self.add_players(player, card, player_rectangle)
         street_commits = self.add_street_commits(street_commit, street_commit_rectangle)
@@ -596,7 +600,7 @@ class _SVGPoker:
 
         player_background = player.get_sub_svg("player-background", "class")
         player_background.width = player.width - 10
-        player_background.height = player_background.height - 10
+        player_background.height = player.height - 10
 
         cards = player.get_sub_svg("cards", "class")
         cards.width = self.num_hole_cards * card.width
@@ -614,6 +618,13 @@ class _SVGPoker:
             new_player = self.new_player(
                 player, str(player_idx), card, self.num_hole_cards
             )
+            # Set player name
+            player_name = new_player.get_sub_svg("player-name", "class")
+            if self.agents:
+                player_name.svg.text = f"{self.agents[player_idx].name}"
+            else:
+                player_name.svg.text = f"Player {player_idx + 1}"
+            player_name.id = f"player-name-{new_player.id}"
             new_player.center(x=round(x), y=round(y))
             players.append(new_player)
         return players
