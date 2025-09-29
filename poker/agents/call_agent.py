@@ -6,6 +6,7 @@ class CallAgent(BaseAgent):
     def __init__(self) -> None:
         super().__init__()
         self.name = "Call Agent"
+        self.short_name = "Call"
         
     def act(self, obs: clubs.poker.engine.ObservationDict) -> int:
         return obs['call']

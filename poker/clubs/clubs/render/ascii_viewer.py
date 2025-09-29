@@ -155,7 +155,7 @@ class ASCIIViewer(viewer.PokerViewer):
         iterator = zip(config["hole_cards"], config["stacks"], config["active"])
         for idx, (hand, stack, active) in enumerate(iterator):
             if self.agents:
-                player_name = self.agents[idx].name + " "
+                player_name = "{:2}. ".format(idx + 1) + self.agents[idx].short_name + " "
             else:
                 player_name = "{:2}. ".format(idx + 1)
             if not active:

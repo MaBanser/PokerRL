@@ -24,6 +24,7 @@ class SimpleAgent(BaseAgent):
             ({int(self.fold_probability*100)}/\
             {int(self.call_probability*100)}/\
             {int(self.raise_probability*100)})'
+        self.short_name = 'Simple'
 
     def act(self, obs: clubs.poker.engine.ObservationDict) -> int:
         call = obs['call']

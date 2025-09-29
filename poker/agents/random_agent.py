@@ -9,6 +9,7 @@ class RandomAgent(BaseAgent):
     def __init__(self) -> None:
         super().__init__()
         self.name = "Random Agent"
+        self.short_name = "Random"
 
     def act(self, obs: clubs.poker.engine.ObservationDict) -> int:
         call = obs['call']
