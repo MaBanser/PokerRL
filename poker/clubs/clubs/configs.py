@@ -8,6 +8,7 @@ else:
 
 
 class PokerConfig(TypedDict):
+    name: str
     num_players: int
     num_streets: int
     blinds: Union[int, List[int]]
@@ -28,6 +29,7 @@ class PokerConfig(TypedDict):
 
 
 LEDUC_TWO_PLAYER: PokerConfig = {
+    "name": "Leduc",
     "num_players": 2,
     "num_streets": 2,
     "blinds": 0,
@@ -46,6 +48,7 @@ LEDUC_TWO_PLAYER: PokerConfig = {
 }
 
 KUHN_TWO_PLAYER: PokerConfig = {
+    "name": "Kuhn",
     "num_players": 2,
     "num_streets": 1,
     "blinds": 0,
@@ -64,6 +67,7 @@ KUHN_TWO_PLAYER: PokerConfig = {
 }
 
 KUHN_THREE_PLAYER: PokerConfig = {
+    "name": "Kuhn",
     "num_players": 3,
     "num_streets": 1,
     "blinds": 0,
@@ -82,6 +86,7 @@ KUHN_THREE_PLAYER: PokerConfig = {
 }
 
 LIMIT_HOLDEM_TWO_PLAYER: PokerConfig = {
+    "name": "Holdem",
     "num_players": 2,
     "num_streets": 4,
     "blinds": [1, 2],
@@ -100,6 +105,7 @@ LIMIT_HOLDEM_TWO_PLAYER: PokerConfig = {
 }
 
 LIMIT_HOLDEM_SIX_PLAYER: PokerConfig = {
+    "name": "Holdem",
     "num_players": 6,
     "num_streets": 4,
     "blinds": [1, 2, 0, 0, 0, 0],
@@ -118,6 +124,7 @@ LIMIT_HOLDEM_SIX_PLAYER: PokerConfig = {
 }
 
 LIMIT_HOLDEM_NINE_PLAYER: PokerConfig = {
+    "name": "Holdem",
     "num_players": 9,
     "num_streets": 4,
     "blinds": [1, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -136,6 +143,7 @@ LIMIT_HOLDEM_NINE_PLAYER: PokerConfig = {
 }
 
 NO_LIMIT_HOLDEM_TWO_PLAYER: PokerConfig = {
+    "name": "Holdem",
     "num_players": 2,
     "num_streets": 4,
     "blinds": [1, 2],
@@ -154,6 +162,7 @@ NO_LIMIT_HOLDEM_TWO_PLAYER: PokerConfig = {
 }
 
 NO_LIMIT_HOLDEM_SIX_PLAYER: PokerConfig = {
+    "name": "Holdem",
     "num_players": 6,
     "num_streets": 4,
     "blinds": [1, 2, 0, 0, 0, 0],
@@ -172,6 +181,7 @@ NO_LIMIT_HOLDEM_SIX_PLAYER: PokerConfig = {
 }
 
 NO_LIMIT_HOLDEM_NINE_PLAYER: PokerConfig = {
+    "name": "Holdem",
     "num_players": 9,
     "num_streets": 4,
     "blinds": [1, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -190,6 +200,7 @@ NO_LIMIT_HOLDEM_NINE_PLAYER: PokerConfig = {
 }
 
 NO_LIMIT_HOLDEM_BB_ANTE_NINE_PLAYER: PokerConfig = {
+    "name": "Holdem",
     "num_players": 9,
     "num_streets": 4,
     "blinds": [2, 4, 0, 0, 0, 0, 0, 0, 0],
@@ -208,6 +219,7 @@ NO_LIMIT_HOLDEM_BB_ANTE_NINE_PLAYER: PokerConfig = {
 }
 
 POT_LIMIT_OMAHA_TWO_PLAYER: PokerConfig = {
+    "name": "Omaha",
     "num_players": 2,
     "num_streets": 4,
     "blinds": [1, 2],
@@ -226,6 +238,7 @@ POT_LIMIT_OMAHA_TWO_PLAYER: PokerConfig = {
 }
 
 POT_LIMIT_OMAHA_SIX_PLAYER: PokerConfig = {
+    "name": "Omaha",
     "num_players": 6,
     "num_streets": 4,
     "blinds": [1, 2, 0, 0, 0, 0],
@@ -244,6 +257,7 @@ POT_LIMIT_OMAHA_SIX_PLAYER: PokerConfig = {
 }
 
 POT_LIMIT_OMAHA_NINE_PLAYER: PokerConfig = {
+    "name": "Omaha",
     "num_players": 9,
     "num_streets": 4,
     "blinds": [1, 2, 0, 0, 0, 0, 0, 0, 0],
@@ -262,6 +276,7 @@ POT_LIMIT_OMAHA_NINE_PLAYER: PokerConfig = {
 }
 
 SHORT_DECK_TWO_PLAYER: PokerConfig = {
+    "name": "Short Deck",
     "num_players": 2,
     "num_streets": 4,
     "blinds": [1, 2],
@@ -280,6 +295,7 @@ SHORT_DECK_TWO_PLAYER: PokerConfig = {
 }
 
 SHORT_DECK_SIX_PLAYER: PokerConfig = {
+    "name": "Short Deck",
     "num_players": 6,
     "num_streets": 4,
     "blinds": [1, 2, 0, 0, 0, 0],
@@ -298,6 +314,7 @@ SHORT_DECK_SIX_PLAYER: PokerConfig = {
 }
 
 SHORT_DECK_NINE_PLAYER: PokerConfig = {
+    "name": "Short Deck",
     "num_players": 9,
     "num_streets": 4,
     "blinds": [1, 2, 0, 0, 0, 0, 0, 0, 0],

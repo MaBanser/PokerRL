@@ -38,6 +38,8 @@ class Dealer:
 
     Parameters
     ----------
+    name : str
+        name of the game, e.g. 'Leduc', 'Kuhn', 'Holdem', 'Omaha', 'Short Deck'
     num_players : int
         maximum number of players
     num_streets : int
@@ -100,6 +102,7 @@ class Dealer:
     --------
 
         >>> Dealer( # 1-2 Heads Up No Limit Texas Hold'em
+        ...     name='Holdem',
         ...     num_players=2, num_streets=4, blinds=[1, 2], antes=0,
         ...     raise_sizes='inf', num_raises='inf',
         ...     num_suits=4, num_ranks=13, num_hole_cards=2,
@@ -107,6 +110,7 @@ class Dealer:
         ...     mandatory_num_hole_cards=0, start_stack=200
         ... )
         >>> Dealer( # 1-2 6 Player PLO
+        ...     name='Omaha',
         ...     num_players=6, num_streets=4, blinds=[1, 2],
         ...     antes=0, raise_sizes='pot', num_raises='inf',
         ...     num_suits=4, num_ranks=13, num_hole_cards=4,
@@ -114,6 +118,7 @@ class Dealer:
         ...     mandatory_num_hole_cards=2, start_stack=200
         ... )
         >>> Dealer( # 1-2 Heads Up No Limit Short Deck
+        ...     name='Short Deck',
         ...     num_players=2, num_streets=4, blinds=[1, 2], antes=0,
         ...     raise_sizes='inf', num_raises='inf',
         ...     num_suits=4, num_ranks=9, num_hole_cards=2,
@@ -128,6 +133,7 @@ class Dealer:
 
     def __init__(
         self,
+        name: str,
         num_players: int,
         num_streets: int,
         blinds: Union[int, List[int]],
@@ -196,6 +202,7 @@ class Dealer:
             )
 
         # config
+        self.name = name
         self.num_players = num_players
         self.num_streets = num_streets
         self.blinds = blinds
