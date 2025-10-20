@@ -408,6 +408,7 @@ class Dealer:
         if call and ((bet < call) or fold):
             self.active[self.action] = False
             bet = 0
+            fold = True
 
         # if bet is full raise record as largest raise
         if bet and (bet - call) >= self.largest_raise:
