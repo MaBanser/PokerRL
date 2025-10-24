@@ -1,4 +1,6 @@
 echo off
+echo "Removing existing PokerRL Environment"
+call conda remove --name PokerRL --all
 echo "Creating Conda Environment:"
 echo:
 call conda env create -f PokerRL.yml
