@@ -20,10 +20,7 @@ class SimpleAgent(BaseAgent):
         self.call_probability = (1/ sum_probabilities) * call_probability
         self.raise_probability = (1/ sum_probabilities) * raise_probability
         
-        self.name = f'Simple Agent\
-            ({int(self.fold_probability*100)}/\
-            {int(self.call_probability*100)}/\
-            {int(self.raise_probability*100)})'
+        self.name = f'Simple Agent'
         self.short_name = 'Simple'
 
     def act(self, obs: clubs.poker.engine.ObservationDict) -> int:
@@ -36,5 +33,5 @@ class SimpleAgent(BaseAgent):
         elif rand < self.fold_probability + self.call_probability:
             bet = call
         else:
-            bet = random.randint(min_raise, max_raise)
+            bet = max(random.randint(min_raise, max_raise), call)
         return bet
