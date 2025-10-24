@@ -5,7 +5,10 @@
  dependencies:
    - pip
    - numpy
+   - pandas
    - matplotlib
+   - seaborn
+   - scikit-learn
    - torchinfo
    - pip:
      - -e ./poker/clubs[render]
