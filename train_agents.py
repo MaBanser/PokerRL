@@ -183,7 +183,10 @@ if __name__ == "__main__":
     use_cuda = torch.cuda.is_available()
     device   = torch.device("cuda" if use_cuda else "cpu")
 
-    kwargs, weights = torch.load(f'model_weights/{config["name"]}_{config["num_players"]}/hand_strength_predictor.pth')
+    try:
+        kwargs, weights = torch.load(f'model_weights/{config["name"]}_{config["num_players"]}/hand_strength_predictor.pth')
+    except FileNotFoundError:
+        raise FileNotFoundError(f'No model weights found for Hand Strength Predictor at model_weights/{config["name"]}_{config["num_players"]}/hand_strength_predictor.pth. Please train the model first by running train_handstrength.py.')
     hand_strength_predictor = models.HandStrengthModel(
         config=config,
         **kwargs

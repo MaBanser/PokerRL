@@ -720,14 +720,17 @@ if __name__ == "__main__":
     baseline_name = 'NFSP Agent (Training)'
     agent_name = 'NFSP Agent + Equity (Training)'
 
-    with open(f'training_progress/player/{config['name']}_{config['num_players']}/{model_state}/{baseline_name}_loss_hist.txt') as file:
-        baseline_losses = json.load(file)
-    with open(f'training_progress/player/{config['name']}_{config['num_players']}/{model_state}/{baseline_name}_reward_hist.txt') as file:
-        baseline_metrics = json.load(file)
-    with open(f'training_progress/player/{config['name']}_{config['num_players']}/{model_state}/{agent_name}_loss_hist.txt') as file:
-        agent_losses = json.load(file)
-    with open(f'training_progress/player/{config['name']}_{config['num_players']}/{model_state}/{agent_name}_reward_hist.txt') as file:
-        agent_metrics = json.load(file)
+    try:
+        with open(f'training_progress/player/{config['name']}_{config['num_players']}/{model_state}/{baseline_name}_loss_hist.txt') as file:
+            baseline_losses = json.load(file)
+        with open(f'training_progress/player/{config['name']}_{config['num_players']}/{model_state}/{baseline_name}_reward_hist.txt') as file:
+            baseline_metrics = json.load(file)
+        with open(f'training_progress/player/{config['name']}_{config['num_players']}/{model_state}/{agent_name}_loss_hist.txt') as file:
+            agent_losses = json.load(file)
+        with open(f'training_progress/player/{config['name']}_{config['num_players']}/{model_state}/{agent_name}_reward_hist.txt') as file:
+            agent_metrics = json.load(file)
+    except FileNotFoundError:
+        raise FileNotFoundError("Training progress files not found. Please ensure that the training has been completed and the files exist.")
 
     os.makedirs(f'agent_eval/{config['name']}_{config['num_players']}/{model_state}', exist_ok=True)
 

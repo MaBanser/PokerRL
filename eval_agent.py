@@ -13,7 +13,10 @@ def main():
     config = clubs.configs.LEDUC_TWO_PLAYER.copy()
 
     # Load NFSP model
-    kwargs, weights = torch.load(f'model_weights/{config["name"]}_{config["num_players"]}/short_state/NFSP Agent (Training)_0.pth')
+    try:
+        kwargs, weights = torch.load(f'model_weights/{config["name"]}_{config["num_players"]}/short_state/NFSP Agent (Training)_0.pth')
+    except FileNotFoundError:
+        raise FileNotFoundError(f'No model weights found for NFSP Agent at model_weights/{config["name"]}_{config["num_players"]}/short_state/NFSP Agent (Training)_0.pth. Please train the model first by running train_agents.py.')
     nfsp_0 = models.NFSP(
         config=config,
         **kwargs
@@ -25,7 +28,10 @@ def main():
         model = nfsp_0,
     )
 
-    kwargs, weights = torch.load(f'model_weights/{config["name"]}_{config["num_players"]}/short_state/NFSP Agent (Training)_1.pth')
+    try:
+        kwargs, weights = torch.load(f'model_weights/{config["name"]}_{config["num_players"]}/short_state/NFSP Agent (Training)_1.pth')
+    except FileNotFoundError:
+        raise FileNotFoundError(f'No model weights found for NFSP Agent at model_weights/{config["name"]}_{config["num_players"]}/short_state/NFSP Agent (Training)_1.pth. Please train the model first by running train_agents.py.')
     nfsp_1 = models.NFSP(
         config=config,
         **kwargs
@@ -38,7 +44,10 @@ def main():
     )
 
     # Load hand strength predictor
-    kwargs, weights = torch.load(f'model_weights/{config["name"]}_{config["num_players"]}/hand_strength_predictor.pth')
+    try:
+        kwargs, weights = torch.load(f'model_weights/{config["name"]}_{config["num_players"]}/hand_strength_predictor.pth')
+    except FileNotFoundError:
+        raise FileNotFoundError(f'No model weights found for Hand Strength Predictor at model_weights/{config["name"]}_{config["num_players"]}/hand_strength_predictor.pth. Please train the model first by running train_handstrength.py.')
     hand_strength_predictor = models.HandStrengthModel(
         config=config,
         **kwargs
@@ -46,7 +55,10 @@ def main():
     hand_strength_predictor.load_state_dict(weights)
 
     # Load NFSP + Equity model
-    kwargs, weights = torch.load(f'model_weights/{config["name"]}_{config["num_players"]}/short_state/NFSP Agent + Equity (Training)_0.pth')
+    try:
+        kwargs, weights = torch.load(f'model_weights/{config["name"]}_{config["num_players"]}/short_state/NFSP Agent + Equity (Training)_0.pth')
+    except FileNotFoundError:
+        raise FileNotFoundError(f'No model weights found for NFSP + Equity Agent at model_weights/{config["name"]}_{config["num_players"]}/short_state/NFSP Agent + Equity (Training)_0.pth. Please train the model first by running train_agents.py.')
     nfsp_equity_0 = models.NFSP(
         config=config,
         **kwargs
@@ -59,7 +71,10 @@ def main():
         hand_strength_predictor=hand_strength_predictor
     )
 
-    kwargs, weights = torch.load(f'model_weights/{config["name"]}_{config["num_players"]}/short_state/NFSP Agent + Equity (Training)_1.pth')
+    try:
+        kwargs, weights = torch.load(f'model_weights/{config["name"]}_{config["num_players"]}/short_state/NFSP Agent + Equity (Training)_1.pth')
+    except FileNotFoundError:
+        raise FileNotFoundError(f'No model weights found for NFSP + Equity Agent at model_weights/{config["name"]}_{config["num_players"]}/short_state/NFSP Agent + Equity (Training)_1.pth. Please train the model first by running train_agents.py.')
     nfsp_equity_1 = models.NFSP(
         config=config,
         **kwargs
@@ -72,7 +87,7 @@ def main():
         hand_strength_predictor=hand_strength_predictor
     )
    
-    agent_list = [nfsp_agent_0, nfsp_equity_agent_1]
+    agent_list = [random_agent, random_agent]
 
     config['start_stack']=50
     env = ClubsEnv(config, agent_list)

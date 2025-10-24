@@ -27,7 +27,6 @@ class ModelPerformance(TypedDict):
     brier_scores: float
 
 
-
 def train_hand_strength_predictor(
         config: PokerConfig,
         num_samples: int = 1000000,
@@ -37,7 +36,7 @@ def train_hand_strength_predictor(
         hidden_size: int = 32,
         num_hidden_layers: int = 2,
         num_epochs: int = 100,
-        learning_rate: float = 0.0001,
+        learning_rate: float = 0.0005,
         min_delta: float = 0.0001,
         patience: int = 20,
         load_data: bool = False,
@@ -56,7 +55,7 @@ def train_hand_strength_predictor(
         hidden_size (int): Size of the hidden layers in the model, default is 32.
         num_hidden_layers (int): Number of hidden layers in the model, default is 2.
         num_epochs (int): Maximum number of epochs to train the model, default is 100.
-        learning_rate (float): Learning rate for the optimizer, default is 0.0001.
+        learning_rate (float): Learning rate for the optimizer, default is 0.0005.
         min_delta (float): Minimum change in loss to qualify as an improvement, default is 0.0001.
         patience (int): Number of epochs with no improvement after which training will be stopped early, default is 20.
         load_data (bool): If True, loads previously collected data from disk instead of collecting new data, default is False.
@@ -70,8 +69,11 @@ def train_hand_strength_predictor(
     """
 
     if load_data:
-        card_data_array = np.loadtxt(f'data/{config["name"]}_{config["num_players"]}/simulated_cards.csv', delimiter=',', dtype=int)
-        outcome_data_array = np.expand_dims(np.loadtxt(f'data/{config["name"]}_{config["num_players"]}/simulated_outcomes.csv', delimiter=',', dtype=np.float32), 1)
+        try:
+            card_data_array = np.loadtxt(f'data/{config["name"]}_{config["num_players"]}/simulated_cards.csv', delimiter=',', dtype=int)
+            outcome_data_array = np.expand_dims(np.loadtxt(f'data/{config["name"]}_{config["num_players"]}/simulated_outcomes.csv', delimiter=',', dtype=np.float32), 1)
+        except FileNotFoundError:
+            raise FileNotFoundError("Pre-collected data not found. Please set load_data to False to collect new data.")
     else:
         card_data_array, outcome_data_array = collect_data(config, num_samples)
         os.makedirs(f'data/{config["name"]}_{config["num_players"]}', exist_ok=True)
@@ -367,15 +369,15 @@ if __name__ == "__main__":
         'num_samples': 1000000,
         'batch_size': 256,
         'test_split': 20,
-        'embedding_dim': 4,
+        'embedding_dim': 8,
         'hidden_size': 32,
         'num_hidden_layers': 2,
         'num_epochs': 100,
         'learning_rate': 0.0005,
         'min_delta': 0.0001,
         'patience': 30,
-        'load_data': True,
-        'visualize_progress': True,
+        'load_data': False,
+        'visualize_progress': False,
         'device': device
 }
     
