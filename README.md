@@ -22,4 +22,4 @@ To run training or evaluation scripts, activate the conda environment and execut
 
 # Results
 
-![Training results NFSP vs NFSP + Hand-Strength Predictor](docs\chips_compare.png)
+![Training results NFSP vs NFSP + Hand-Strength Predictor](docs/chips_compare.png)
