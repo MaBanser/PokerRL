@@ -47,6 +47,25 @@ LEDUC_TWO_PLAYER: PokerConfig = {
     "order": None,
 }
 
+LEDUC_THREE_PLAYER: PokerConfig = {
+    "name": "Leduc",
+    "num_players": 3,
+    "num_streets": 2,
+    "blinds": 0,
+    "antes": 1,
+    "raise_sizes": 2,
+    "num_raises": 2,
+    "num_suits": 2,
+    "num_ranks": 3,
+    "num_hole_cards": 1,
+    "num_community_cards": [0, 1],
+    "num_cards_for_hand": 2,
+    "mandatory_num_hole_cards": 0,
+    "start_stack": 10,
+    "low_end_straight": True,
+    "order": None,
+}
+
 KUHN_TWO_PLAYER: PokerConfig = {
     "name": "Kuhn",
     "num_players": 2,
