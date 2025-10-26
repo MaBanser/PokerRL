@@ -1,5 +1,4 @@
 data/*
-model_weights/*
 hand_strength/*
 training_progress/*
 agent_eval/*

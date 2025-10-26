@@ -85,7 +85,7 @@ class HandStrengthModel(nn.Module):
 if __name__ == "__main__":
     # Example usage
     config = clubs.configs.NO_LIMIT_HOLDEM_SIX_PLAYER
-    embedding_dim = 10  # Dimension of the embedding vectors
+    embedding_dim = 8  # Dimension of the embedding vectors
     hidden_size = 16  # Size of the hidden layers
     num_hidden_layer = 1 # Number of hidden layers
     model = HandStrengthModel(config, embedding_dim, hidden_size, num_hidden_layer)
