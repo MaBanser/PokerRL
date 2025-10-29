@@ -359,7 +359,7 @@ def test(model: HandStrengthModel, data_loader: DataLoader, criterion_1: torch.n
     return avg_loss, brier_score
 
 if __name__ == "__main__":
-    config = clubs.configs.LIMIT_HOLDEM_TWO_PLAYER.copy()
+    config = clubs.configs.LEDUC_TWO_PLAYER.copy()
 
     use_cuda = torch.cuda.is_available()
     device   = torch.device("cuda" if use_cuda else "cpu")

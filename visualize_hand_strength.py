@@ -222,6 +222,7 @@ def visualize_hand_strength_on_board(model: HandStrengthModel, board: List[Card]
 
     annotations[annotations==0]=''
     annotations = np.char.add(annotations, np.char.mod('\n%d%%', np.round(heatmap_data*100)))
+    my_fontsize = 50/np.sqrt(len(heatmap_data))
 
     if num_hole_cards == 2:
         fig = plt.figure(figsize=(15, 15))
@@ -234,7 +235,7 @@ def visualize_hand_strength_on_board(model: HandStrengthModel, board: List[Card]
             cmap="RdGy_r",
             cbar=False,
             square=True,
-            annot_kws={"fontsize": 6, "fontweight": "bold"},
+            annot_kws={"fontsize": my_fontsize, "fontweight": "bold"},
             ax=ax
             )
         ax.tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
@@ -249,7 +250,7 @@ def visualize_hand_strength_on_board(model: HandStrengthModel, board: List[Card]
             cmap="RdGy_r",
             cbar=False,
             square=True,
-            annot_kws={"fontsize": 12, "fontweight": "bold"},
+            annot_kws={"fontsize": my_fontsize, "fontweight": "bold"},
             ax=ax
             )
         ax.set_yticks(np.arange(num_ranks) + 0.5, list(CHAR_RANK_TO_INT_RANK_REVERSED.keys())[:num_ranks], fontsize=20, rotation=0)
@@ -348,7 +349,7 @@ def visualize_card_embeddings(model: HandStrengthModel, fig:Figure = None) -> Fi
     return fig
 
 if __name__ == "__main__":
-    config=clubs.configs.LIMIT_HOLDEM_TWO_PLAYER.copy()
+    config=clubs.configs.LEDUC_TWO_PLAYER.copy()
 
     leduc_boards = [[],[Card('AS')],[Card('KS')],[Card('QS')],[Card('Ah')],[Card('Kh')],[Card('QH')]]
 
@@ -394,10 +395,16 @@ if __name__ == "__main__":
     plt.savefig(f'hand_strength/{model.name}_{model.num_players}/card_embeddings.png', dpi=300, bbox_inches='tight')
     plt.show()
 
-    for board in holdem_boards:
-        fig=visualize_hand_strength_on_board(model, board)
-        plt.savefig(f'hand_strength/{model.name}_{model.num_players}/hand_strength_{[c.__str__() for c in board]}.png', dpi=300, bbox_inches='tight')
-        plt.show()
+    if config["name"] == 'Leduc' :
+        for board in leduc_boards:
+            fig=visualize_hand_strength_on_board(model, board)
+            plt.savefig(f'hand_strength/{model.name}_{model.num_players}/hand_strength_{[c.__str__() for c in board]}.png', dpi=300, bbox_inches='tight')
+            plt.show()
+    elif config["name"] == 'Holdem':
+        for board in holdem_boards:
+            fig=visualize_hand_strength_on_board(model, board)
+            plt.savefig(f'hand_strength/{model.name}_{model.num_players}/hand_strength_{[c.__str__() for c in board]}.png', dpi=300, bbox_inches='tight')
+            plt.show()
 
 
     

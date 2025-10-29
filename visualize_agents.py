@@ -522,9 +522,9 @@ def plot_action_proportions(processed_data, comp_name='comparison') -> plt.Figur
     
     return fig
 
-def create_all_plots(baseline_dict, compare_dict, comp_name='comparison') -> tuple[plt.Figure, plt.Figure, plt.Figure]:
+def create_comparison_plots(baseline_dict, compare_dict, comp_name='comparison') -> tuple[plt.Figure, plt.Figure, plt.Figure]:
     """
-    Create all three plot types from the input data.
+    Create three comparison plots from the baseline and comparison dictionaries.
 
     Args:
         baseline_dict: Dictionary containing baseline agent results.
@@ -746,7 +746,7 @@ if __name__ == "__main__":
     fig = plot_rewards(agent_metrics)
     fig.savefig(f'agent_eval/{config['name']}_{config['num_players']}/{model_state}/{agent_name}_rewards.png', dpi=300, bbox_inches='tight')
 
-    chips_fig, win_tie_loss_fig, action_fig = create_all_plots(baseline_metrics,agent_metrics,'Hand_Strength')
+    chips_fig, win_tie_loss_fig, action_fig = create_comparison_plots(baseline_metrics,agent_metrics,'Hand_Strength')
     chips_fig.savefig(f'agent_eval/{config['name']}_{config['num_players']}/{model_state}/chips_compare.png', dpi=300, bbox_inches='tight')
     win_tie_loss_fig.savefig(f'agent_eval/{config['name']}_{config['num_players']}/{model_state}/win_rate_compare.png', dpi=300, bbox_inches='tight')
     action_fig.savefig(f'agent_eval/{config['name']}_{config['num_players']}/{model_state}/actions_compare.png', dpi=300, bbox_inches='tight')    
